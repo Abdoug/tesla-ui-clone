@@ -11,6 +11,7 @@ function Home() {
         <Container>
             {cars && cars.map((car, index) => (
                 <Section
+                    key={index}
                     title={car.title}
                     description={car.description}
                     backgroundImage={car.backgroundImage}

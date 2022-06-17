@@ -1,18 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from "styled-components"
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import { selectCars } from "../features/car/carSlice"
 import { useSelector } from "react-redux"
 
+
 function Header() {
     const [BurgerNavOpened, setBurgerNavOpen] = useState(false);
+    const [counter, setCounter] = useState(0);
     const cars = useSelector(selectCars);
-
-    useEffect(() => {
-        console.log(cars);
-    }, [])
 
     return (
         <Container>
@@ -25,16 +23,16 @@ function Header() {
                 ))}
             </Menu>
             <RightMenu>
-                <a href="#">Shop</a>
+                <a href="#" onClick={() => setCounter(counter + 1)}>Shop</a>
                 <a href="#">Tesla Account</a>
                 <CustomMenu onClick={() => setBurgerNavOpen(true)}/>
             </RightMenu>
             <BurgerNav show={BurgerNavOpened}>
                 <CloseWrapper>
-                    <CustomClose  onClick={() => setBurgerNavOpen(false)}/>
+                    <CustomClose onClick={() => setBurgerNavOpen(false)}/>
                 </CloseWrapper>
                 {cars && cars.map((car, index) => (
-                    <li><a href='#' key={index}>{car.title}</a></li>
+                    <li key={index}><a href='#'>{car.title}</a></li>
                 ))}
                 <li><a href='#'>Existing Inventory</a></li>
                 <li><a href='#'>Used Inventory</a></li>
