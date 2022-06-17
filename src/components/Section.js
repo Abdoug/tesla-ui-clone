@@ -1,32 +1,58 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from "styled-components"
 import Fade from 'react-reveal/Fade';
+import { VisibilityObserver } from "reactjs-visibility";
 
 function Section({ backgroundImage, title, description, leftBtnText, rightBtnText }) {
+  const isRendered = useRef(false);
+
+  useEffect(() => {
+    isRendered.current = true;
+
+    return () => {
+      isRendered.current = false;
+    }
+  }, [])
+
+  function handleChangeVisibility(visible) {
+    if (visible && isRendered.current) {
+      console.log("I am now visible: ", title);
+    }
+  };
+
+  // const options = {
+  //   rootMargin: "0px",
+  // };
+  
   return (
     <Wrap bgImg={backgroundImage}>
-      <Fade bottom>
-        <ItemText>
-          <h1>{title}</h1>
-          <p>{description}</p>
-        </ItemText>
-      </Fade>
-      <Buttons>
+      <VisibilityObserver
+        onChangeVisibility={handleChangeVisibility}
+        // options={options}
+      >
         <Fade bottom>
-          <ButtonsGroup>
-            <LeftButton>
-              {leftBtnText}
-            </LeftButton>
-            {
-              rightBtnText && 
-                <RightButton>
-                  {rightBtnText}
-                </RightButton>
-            }
-          </ButtonsGroup>
-          <DownArrow src="/images/down-arrow.svg"></DownArrow>
+            <ItemText>
+              <h1>{title}</h1>
+              <p>{description}</p>
+            </ItemText>
         </Fade>
-      </Buttons>
+        <Buttons>
+          <Fade bottom>
+            <ButtonsGroup>
+              <LeftButton>
+                {leftBtnText}
+              </LeftButton>
+              {
+                rightBtnText && 
+                  <RightButton>
+                    {rightBtnText}
+                  </RightButton>
+              }
+            </ButtonsGroup>
+            <DownArrow src="/images/down-arrow.svg"></DownArrow>
+          </Fade>
+        </Buttons>
+      </VisibilityObserver>
     </Wrap>
   )
 }
